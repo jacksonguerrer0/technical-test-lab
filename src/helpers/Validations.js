@@ -52,7 +52,7 @@ const validateEmail = (email = '') => {
   if(email === ''){
       return 'Completa la información'
   }
-  if(!(/^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$/.test(email))){
+  if(!(/^([a-z0-9_.-]+)@([\da-z.-]+)\.([a-z.]{2,6})$/.test(email))){
       return `Email invalido`
   }
 }
