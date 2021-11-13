@@ -50,7 +50,7 @@ const Login = () => {
   const [login, setLogin] = useState(true)
   const [form, setForm] = useState({
   })
-  const {name, email, password} = form
+  const {name, emailRegister, passwordRegister, emailLogin, passwordLogin} = form
   const handleLogin = () => {
     setLogin(!login)
   }
@@ -70,10 +70,10 @@ const Login = () => {
     loginGoogle()
   }
   const handleLoginEmailPassword = () => {
-    loginEmailAndPassword(email, password) 
+    loginEmailAndPassword(emailLogin, passwordLogin) 
   }
   const handleRegisterEmailPassword = () => {
-    registerEmailAndPassword(name, email, password)
+    registerEmailAndPassword(name, emailRegister, passwordRegister)
   }
 
   useEffect(() => {

@@ -1,25 +1,40 @@
-import { db, firebase, google } from "../firebase_config/firebase_config"
-
-
+import { db, firebase, google, auth } from "../firebase_config/firebase_config"
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
+import {addDoc, collection } from 'firebase/firestore'
 export const loginGoogle = async () => {
   await firebase.auth().signInWithPopup(google)
 }
 
 export const registerEmailAndPassword = (name, email, password) => {
-  // firebase.auth().createUserWithEmailAndPassword(email, password)
-    // .then(async (e) => {
-    //   // await user.updateProfile({displayName: name})
-    //   console.log(e)
-    // })
+  createUserWithEmailAndPassword (auth, email, password)
+    .then(async ({user}) => {
+      console.log(db)
+      if (user) {
+       addDoc(collection(db, `agendaUsuarios/${name}/`),{
+         name: name,
+         email: email,
+         id: user.uid
+       })
+       .then(() => console.log("Number changer"))
+       .catch(error => console.log(error))
+      } else {
+        console.log("No user")
+      }
+    })
+    .catch((error) => {
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      console.log(errorCode, errorMessage)
+    });
 }
 export const loginEmailAndPassword = (email, password) => {
-//   firebase.auth().signInWithEmailAndPassword(email, password)
-//       .then(({user})=>{
-//           console.log(user.uid, user.email, user.displayName)
-//       })
-//       .catch(error => {
-//           throw error
-//       })
+  signInWithEmailAndPassword(auth, email, password)
+      .then(({user})=>{
+          console.log(user.uid, user.email, user.displayName)
+      })
+      .catch(error => {
+          throw error
+      })
 }
 
 
