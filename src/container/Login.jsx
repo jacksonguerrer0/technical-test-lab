@@ -1,11 +1,9 @@
 import { TextField, Button } from '@mui/material'
-import React, { useContext, useEffect, useState } from 'react'
+import React, {  useEffect, useState } from 'react'
 import imgGoogle from '../assets/google.png'
 import styled from 'styled-components'
 import { loginEmailAndPassword, loginGoogle, registerEmailAndPassword } from '../helpers/functions'
 import { useNavigate } from 'react-router-dom'
-import UserContext from '../context/userContext'
-import ValidationForm from '../helpers/Validations.js'
 
 const ContainerLogin = styled.div`
   width: clamp(300px, 90vw, 400px);
@@ -40,11 +38,9 @@ const ContainerLogin = styled.div`
     }
 }
 `
+// Falta la validacion de formularios :)
 
-
-const Login = () => {
-  const { person } = useContext(UserContext)
-  const { errors, handleValidations } = ValidationForm()
+const Login = ({ emailUser }) => {
   const navigate = useNavigate()
 
   const [login, setLogin] = useState(true)
@@ -62,10 +58,6 @@ const Login = () => {
       [name]: value
     })
   }
-  const handleBlur = (e) => {
-    const target = e.target
-    handleValidations(target, form)
-  }
   const handleLoginGoogle = () => {
     loginGoogle()
   }
@@ -75,12 +67,11 @@ const Login = () => {
   const handleRegisterEmailPassword = () => {
     registerEmailAndPassword(name, emailRegister, passwordRegister)
   }
-
   useEffect(() => {
-    if (person.id) {
+    if (emailUser) {
       navigate('/')
     }
-  }, [navigate, person.id])
+  }, [navigate, emailUser])
 
   return (
     <ContainerLogin>
@@ -91,18 +82,14 @@ const Login = () => {
               type="email"
               name='emailLogin'
               onChange={handleFormChange}
-              onBlur={handleBlur}
-              error={errors.emailLogin ? true : false}
-              helperText={errors.emailLogin ? errors.emailLogin : ''}
+              required
             />
             <TextField
               label="Contrseña"
               type="password"
               name='passwordLogin'
               onChange={handleFormChange}
-              onBlur={handleBlur}
-              error={errors.passwordLogin ? true : false}
-              helperText={errors.passwordLogin ? errors.passwordLogin : ''}
+              required
             />
             <Button variant="contained" onClick={handleLoginEmailPassword}>Iniciar</Button>
           </>
@@ -112,35 +99,27 @@ const Login = () => {
               type="string"
               name='name'
               onChange={handleFormChange}
-              onBlur={handleBlur}
-              error={errors.name ? true : false}
-              helperText={errors.name ? errors.name : ''}
+              required
             />
             <TextField label="Correo"
               type="email"
               name='emailRegister'
               onChange={handleFormChange}
-              onBlur={handleBlur}
-              error={errors.emailRegister ? true : false}
-              helperText={errors.emailRegister ? errors.emailRegister : ''}
+              required
             />
             <TextField
               label="Contrseña"
               type="password"
               name='passwordRegister'
               onChange={handleFormChange}
-              onBlur={handleBlur}
-              error={errors.passwordRegister ? true : false}
-              helperText={errors.passwordRegister ? errors.passwordRegister : ''}
+              required
             />
             <TextField
               label="Repite la Contraseña"
               type="password"
               name='passwordRegisterRepeat'
               onChange={handleFormChange}
-              onBlur={handleBlur}
-              error={errors.passwordRegisterRepeat ? true : false}
-              helperText={errors.passwordRegisterRepeat ? errors.passwordRegisterRepeat : ''}
+              required
             />
             <Button variant="contained" onClick={handleRegisterEmailPassword}>Registrar</Button>
           </>
@@ -156,19 +135,3 @@ const Login = () => {
 }
 
 export default Login
-
-
-// const thereErrors = (errors) => {
-//   const arrErrors = Object.values(errors)
-//   // let error = false
-//   if (arrErrors.legth === 0) {
-//     return false
-//   }
-//   arrErrors.forEach(ele => {
-//     if (ele === undefined) {
-//       // error = true
-//       return false
-//     }
-//   });
-//   // return true
-// }

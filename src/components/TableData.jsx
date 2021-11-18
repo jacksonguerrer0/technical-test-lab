@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext, useState } from 'react';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -9,17 +9,38 @@ import Paper from '@mui/material/Paper';
 import Button from '@mui/material/Button';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
+import ModalEdit from './ModalEdit';
+import UserContext from '../context/userContext';
+import { deleteRegisterAgenda } from '../helpers/functions';
 // import UserContext from '../context/userContext';
 // import { db } from '../firebase_config/firebase_config';
 
 
 
 const rows = [
-
+  {
+    name: 'Jackson',
+    streetAdress: 'Cra 11a 5-12',
+    age: 18,
+    email: 'jacksonguerrerovega2@gmail.com'
+  },
+  {
+    name: 'Jorge',
+    streetAdress: 'Cra 11a 5-12',
+    age: 20,
+    email: 'jorge2@gmail.com'
+  }
 ];
 
 
-const TableData = () => {
+const TableData = ({emailUser}) => {
+  const { dataAgendaUser } = useContext(UserContext)
+  const [openEdit, setOpenEdit] = useState(false)
+  const [dataRow, setDataRow] = useState({})
+  const handleEditModal = (row) => {
+    setOpenEdit(true)
+    setDataRow(row)
+  }
   // const [rows, setRows] = useState([])
   // const { person, setPerson } = useContext(UserContext)
 
@@ -35,6 +56,9 @@ const TableData = () => {
   //   }
   //   getAgenda()
   // }, [person?.id])
+  const handleDelete = (row) => {
+    deleteRegisterAgenda(emailUser, row)
+  }
   return (
     <>
     <TableContainer component={Paper} sx={{width: 'calmp(auto, 50vw, 700px)'}}>
@@ -50,21 +74,21 @@ const TableData = () => {
         </TableHead>
         <TableBody>
           {
-            rows.map((row) => (
+            dataAgendaUser?.agenda?.map((row) => (
               <TableRow
-                key={row.name}
+                key={row.id}
                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
               >
                 <TableCell component="th" scope="row">
                   {row.name}
                 </TableCell>
                 <TableCell align="right">{row.age}</TableCell>
-                <TableCell align="right">{row.streetAdress}</TableCell>
+                <TableCell align="right">{row.adress}</TableCell>
                 <TableCell align="right">{row.email}</TableCell>
                 <TableCell align="center">
-                  <Button align='center' variant="contained" endIcon={<EditIcon />}>
+                  <Button align='center' variant="contained" endIcon={<EditIcon />} onClick={() => handleEditModal(row)}>
                   </Button>
-                  <Button align='center' variant="contained" color="error" endIcon={<DeleteIcon />}></Button>
+                  <Button align='center' variant="contained" color="error" endIcon={<DeleteIcon />} onClick={() => handleDelete(row)}></Button>
                 </TableCell>
               </TableRow>
             ))
@@ -72,6 +96,7 @@ const TableData = () => {
         </TableBody>
       </Table>
     </TableContainer>
+    <ModalEdit openEdit={openEdit} setOpenEdit={setOpenEdit} dataRow={dataRow} emailUser={emailUser}/>
     {
       rows.length === 0 && <h3 style={{margin:'1rem'}}>¿Que quieres agregar?</h3>
     }

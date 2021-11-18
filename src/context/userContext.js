@@ -8,9 +8,8 @@ const UserContext = createContext();
 // Proveedor
 
 const UserProvider = ({children}) => {
-  const [person, setPerson] = useState({})
-
-  const data = {person, setPerson}
+  const [dataAgendaUser, setDataAgendaUser] = useState(null)
+  const data = {dataAgendaUser, setDataAgendaUser}
 
   return(
     <UserContext.Provider value={data}>{children}</UserContext.Provider>

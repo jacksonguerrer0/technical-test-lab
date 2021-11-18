@@ -1,25 +1,19 @@
-import { db, firebase, google, auth } from "../firebase_config/firebase_config"
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
-import {addDoc, collection } from 'firebase/firestore'
+import  firebaseApp  from "../firebase_config/firebase_config"
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signInWithRedirect, GoogleAuthProvider } from "firebase/auth";
+import { getFirestore, doc, getDoc, setDoc, updateDoc, onSnapshot } from 'firebase/firestore'
+
+const auth = getAuth(firebaseApp)
+const googleProvider = new GoogleAuthProvider()
+const firestore  = getFirestore(firebaseApp)
+
 export const loginGoogle = async () => {
-  await firebase.auth().signInWithPopup(google)
+  await signInWithRedirect(auth, googleProvider)
+  
 }
 
 export const registerEmailAndPassword = (name, email, password) => {
   createUserWithEmailAndPassword (auth, email, password)
     .then(async ({user}) => {
-      console.log(db)
-      if (user) {
-       addDoc(collection(db, `agendaUsuarios/${name}/`),{
-         name: name,
-         email: email,
-         id: user.uid
-       })
-       .then(() => console.log("Number changer"))
-       .catch(error => console.log(error))
-      } else {
-        console.log("No user")
-      }
     })
     .catch((error) => {
       const errorCode = error.code;
@@ -33,28 +27,77 @@ export const loginEmailAndPassword = (email, password) => {
           console.log(user.uid, user.email, user.displayName)
       })
       .catch(error => {
-          throw error
+          console.log(error)
       })
 }
 
 
-// agregar
 
-export const addRegisterAgenda  = (id, data) => {
-  db.collection(`/agendaUsuarios/${id}`).add(data)
+// Firestore
+
+// Obtener o crear documento
+export const getDocOrAddDoc =  async (id, setDataAgendaUser) => {
+  // Referencia del documento
+  const docRef = doc(firestore, `agendaUsuarios/${id}`)
+  // Obtener documento
+  const docRes = await getDoc(docRef)
+
+  // Si existe el documeno
+  if(docRes.exists()){
+    onSnapshot(docRef, (doc) => {
+      setDataAgendaUser(doc.data())
+    });
+  }
+  // Si no existe puedo agregar valores por defecto 
+  else{
+    const docData = await setDoc(docRef, {agenda: [], usuario: {}})
+    return docData
+  }
+}
+
+export const addRegisterAgenda  = async (id, data) => {
+  // Referencia del documento
+  const docRef = doc(firestore, `agendaUsuarios/${id}`)
+  // Obtener documento
+  const docRes = await getDoc(docRef)
+
+  const newArr = [
+    ...docRes.data().agenda, {...data, id: new Date().getTime()}
+  ]
+
+  await updateDoc(docRef, {agenda: [...newArr]})
   
 }
-export const getAgenda =  async(id) => {
-  let res = await db.collection(`/agendaUsuarios/${id}`).get()
-  const movies = []
-  res.forEach(element => {
-      movies.push({...element.data(), id: element.id })
-  });
-}
-export const deleteRegsiterAgenda = (idUser, idItem) => {
-  db.collection(`/agendaUsuarios/${idUser}`).doc(idItem).delete()
+export const deleteRegisterAgenda = async (id, item) => {
+  const docRef = doc(firestore, `agendaUsuarios/${id}`)
+  const docRes = await getDoc(docRef)
+  const agenda = docRes.data().agenda
+  const resArr = agenda.filter(ele => ele.id !== item.id)
+  await updateDoc(docRef, {agenda: [...resArr]})
+
 }
 
-export const editRegisterAenda = (idUser, idItem, data) => {
-  db.collection(`/agendaUsuarios/${idUser}`).doc(idItem).update(data)
+export const editRegisterAgenda = async (id, data, dataForm) => {
+  const docRef = doc(firestore, `agendaUsuarios/${id}`)
+  const docRes = await getDoc(docRef)
+  const docAgenda = docRes.data().agenda
+  const filtro = docAgenda.filter(ele => ele.id !== data.id)
+  const newAgenda = {
+    ...data, 
+    ...dataForm
+  }
+  await updateDoc(docRef, {agenda: [
+    ...filtro, newAgenda
+  ]})
 }
+
+
+
+
+// export const snapshotAgenda = (id) => {
+//   const docRef = doc(firestore, `agendaUsuarios/${id}`)
+//   const unsub = onSnapshot(docRef, (doc) => {
+//     console.log(doc.data(), 'unsub')
+//       return doc.data()
+//   });
+// }

@@ -1,9 +1,12 @@
-import React, { useState } from 'react'
+import React, {  useState } from 'react'
 import { TextField, Button, Modal } from '@mui/material'
 import { ContainerModal } from './ModalStyled'
+import { addRegisterAgenda } from '../helpers/functions'
 
-const ModalAdd = ({ openAdd, setOpenAdd }) => {
+
+const ModalAdd = ({ emailUser, openAdd, setOpenAdd }) => {
   const [form, setForm] = useState({})
+
   const handleClose = () => {
     setOpenAdd(false)
   }
@@ -15,8 +18,12 @@ const ModalAdd = ({ openAdd, setOpenAdd }) => {
       [name]: value,
     })
   }
-  const handleAdd = () => {
-    // handleAdd
+  const handleAdd = async (e) => {
+    e.preventDefault()
+    console.log('onSubmit')
+    await addRegisterAgenda(emailUser, form)
+    setOpenAdd(false)
+    setForm({})
   }
   return (
     <>
@@ -26,7 +33,7 @@ const ModalAdd = ({ openAdd, setOpenAdd }) => {
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-        <ContainerModal>
+        <ContainerModal onSubmit={handleAdd}>
           <TextField label="Nombre"
             type="string"
             name='name'
@@ -34,7 +41,7 @@ const ModalAdd = ({ openAdd, setOpenAdd }) => {
           />
           <TextField label="Correo"
             type="email"
-            name='emailLogin'
+            name='email'
             onChange={handleFormChange}
           />
           <TextField label="age"
@@ -47,7 +54,7 @@ const ModalAdd = ({ openAdd, setOpenAdd }) => {
             name='adress'
             onChange={handleFormChange}
           />
-          <Button variant="contained" onClick={handleAdd}>Agregar</Button>
+          <Button variant="contained" type='submit'>Agregar</Button>
         </ContainerModal>
       </Modal>
     </>

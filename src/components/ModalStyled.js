@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 
-export const ContainerModal = styled.div`
+export const ContainerModal = styled.form`
   width: clamp(300px, 90vw, 400px);
   height: auto;
   display: flex; 

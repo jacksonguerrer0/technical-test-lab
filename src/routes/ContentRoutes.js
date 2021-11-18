@@ -1,37 +1,35 @@
-import React, { useContext, useEffect } from 'react'
+import React, {  useEffect, useState } from 'react'
 import {  BrowserRouter, Routes, Navigate,  Route } from 'react-router-dom'
-import { firebase} from '../firebase_config/firebase_config'
+import firebaseApp from '../firebase_config/firebase_config'
+import { getAuth, onAuthStateChanged } from '@firebase/auth'
 import Home from '../container/Home'
 import Login from '../container/Login'
 import '../style/globalStyle.css'
-import UserContext from '../context/userContext.js'
 
+const auth = getAuth(firebaseApp)
 
 
 const ContentRoutes = () => {
-  const {person, setPerson} = useContext(UserContext)
-  
+  const [emailUser, setEmailUser] = useState(null)
+
   useEffect(() => {
-    firebase.auth().onAuthStateChanged(async (user) => {
+    onAuthStateChanged(auth, (user) => {
       if(user?.uid){
-        setPerson({
-          id: user?.uid, 
-          name: user?.displayName, 
-          email: user?.email
-        })
+        setEmailUser(user.email)
       }else{
-       setPerson({})
+        setEmailUser(null)
       }
     })
-  }, [setPerson])
+  }, [setEmailUser])
+  
   return (
     <BrowserRouter>
       <Routes>
-        <Route index path='/login' element={<Login  />} />
+        <Route index path='/login' element={<Login  emailUser={emailUser} />}/>
         <Route path='/' 
         element={
-          <PrivateAuth redirectTo="/login" id={person.id} >
-            <Home  />
+          <PrivateAuth redirectTo="/login" id={emailUser} >
+            <Home emailUser={emailUser} />
           </PrivateAuth>
         } />
 

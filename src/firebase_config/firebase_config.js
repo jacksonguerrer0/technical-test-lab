@@ -1,7 +1,5 @@
 import firebase from 'firebase/compat/app'; //v9
-import { getAuth } from 'firebase/auth'
-import { getFirestore } from "firebase/firestore";
-import 'firebase/compat/auth'
+
 // Your web app's Firebase configuration
 const firebaseConfig = {
   apiKey: "AIzaSyABshZehSip8xJ-s9DaUZcrP1sSTabDGsc",
@@ -14,14 +12,8 @@ const firebaseConfig = {
 
 
 // Initialize Firebase
-firebase.initializeApp(firebaseConfig);
+const firebaseApp = firebase.initializeApp(firebaseConfig);
 
-//referencia de la base de datos 
-const db = getFirestore();
 
-// auth
-const auth = getAuth()
-//permite autenticacion con google 
-const google = new firebase.auth.GoogleAuthProvider()
 
-export {firebase, db, google, auth}
+export default firebaseApp

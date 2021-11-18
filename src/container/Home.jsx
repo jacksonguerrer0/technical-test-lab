@@ -1,12 +1,15 @@
 import { Button } from '@mui/material'
-import React, { useContext } from 'react'
+import React, { useContext, useEffect } from 'react'
 import styled from 'styled-components'
 import TableData from '../components/TableData'
 import AddIcon from '@mui/icons-material/Add';
 import LogoutIcon from '@mui/icons-material/Logout';
-import {firebase} from  '../firebase_config/firebase_config'
 import UserContext from '../context/userContext';
 import ModalAdd from '../components/ModalAdd';
+import { getAuth, signOut } from '@firebase/auth';
+import firebaseApp from '../firebase_config/firebase_config';
+import { getDocOrAddDoc } from '../helpers/functions';
+
 const HomeContainer = styled.main`
   width: 100vw;
   max-width: 900px;
@@ -30,27 +33,39 @@ const HomeContainer = styled.main`
     min-height: 40vh;
   }
 `
-const Home = () => {
-  const { person } = useContext(UserContext)
+
+const auth = getAuth(firebaseApp)
+
+const Home = ({ emailUser }) => {
+  const { dataAgendaUser, setDataAgendaUser } = useContext(UserContext)
   const [openAdd, setOpenAdd] = React.useState(false)
+  // const [personFirestore, setPersonFirestore] = useState({})
+console.log(dataAgendaUser, 'data')
 
   const handleAdd = () => {
     setOpenAdd(true)
   }
-  const handleLogout = () => {
-    firebase.auth().signOut()
+  const handleLogout = async () => {
+    await signOut(auth)
+    setDataAgendaUser(null)
   }
+  useEffect(() => { 
+    const getFirestoreAgendaUsuarios = async () => {
+      await getDocOrAddDoc(emailUser, setDataAgendaUser)
+    }
+    getFirestoreAgendaUsuarios()
+  }, [emailUser, setDataAgendaUser])
   return (
     <HomeContainer>
       <div><LogoutIcon onClick={handleLogout} /></div>
       <aside>
-        <h2>Bienvenid@! {person.name}</h2>
+        <h2>Bienvenid@!</h2>
         <Button variant="contained" startIcon={<AddIcon />} onClick={handleAdd}>
            Agregar
         </Button>
       </aside>
-      <TableData />
-      <ModalAdd openAdd={openAdd} setOpenAdd={setOpenAdd} />
+      <TableData emailUser={emailUser}/>
+      <ModalAdd openAdd={openAdd} setOpenAdd={setOpenAdd} emailUser={emailUser} />
     </HomeContainer>
   )
 }
