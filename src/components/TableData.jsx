@@ -61,14 +61,15 @@ const TableData = ({emailUser}) => {
   }
   return (
     <>
-    <TableContainer component={Paper} sx={{width: 'calmp(auto, 50vw, 700px)'}}>
-      <Table sx={{ minWidth: 650 }} aria-label="Table person">
+    <TableContainer component={Paper} style={{width: "100%",
+    overflowX: "auto", maxHeight: '100vh'}}  >
+      <Table aria-label=" person" sx={{ minWidth: 650 }} style={{    minWidth: 700}} >
         <TableHead sx={{backgroundColor: 'var(--Bg-light)'}}>
           <TableRow>
             <TableCell>Nombre</TableCell>
-            <TableCell align="right">Edad</TableCell>
-            <TableCell align="right">Direccion</TableCell>
-            <TableCell align="right">Correo</TableCell>
+            <TableCell align="left">Edad</TableCell>
+            <TableCell align="left">Direccion</TableCell>
+            <TableCell align="left">Correo</TableCell>
             <TableCell align='center'>Acciones</TableCell>
           </TableRow>
         </TableHead>
@@ -82,9 +83,9 @@ const TableData = ({emailUser}) => {
                 <TableCell component="th" scope="row">
                   {row.name}
                 </TableCell>
-                <TableCell align="right">{row.age}</TableCell>
-                <TableCell align="right">{row.adress}</TableCell>
-                <TableCell align="right">{row.email}</TableCell>
+                <TableCell align="left">{row.age}</TableCell>
+                <TableCell align="left">{row.adress}</TableCell>
+                <TableCell align="left">{row.email}</TableCell>
                 <TableCell align="center">
                   <Button align='center' variant="contained" endIcon={<EditIcon />} onClick={() => handleEditModal(row)}>
                   </Button>

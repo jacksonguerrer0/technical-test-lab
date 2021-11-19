@@ -11,10 +11,9 @@ import firebaseApp from '../firebase_config/firebase_config';
 import { getDocOrAddDoc } from '../helpers/functions';
 
 const HomeContainer = styled.main`
-  width: 100vw;
-  max-width: 900px;
+  /* width: 100vw; */
   padding: 1rem;
-  div{
+  .logout{
     display: flex;
     justify-content: flex-end;
     padding: 1rem;
@@ -37,10 +36,9 @@ const HomeContainer = styled.main`
 const auth = getAuth(firebaseApp)
 
 const Home = ({ emailUser }) => {
-  const { dataAgendaUser, setDataAgendaUser } = useContext(UserContext)
+  const {  setDataAgendaUser } = useContext(UserContext)
   const [openAdd, setOpenAdd] = React.useState(false)
   // const [personFirestore, setPersonFirestore] = useState({})
-console.log(dataAgendaUser, 'data')
 
   const handleAdd = () => {
     setOpenAdd(true)
@@ -57,7 +55,7 @@ console.log(dataAgendaUser, 'data')
   }, [emailUser, setDataAgendaUser])
   return (
     <HomeContainer>
-      <div><LogoutIcon onClick={handleLogout} /></div>
+      <div className='logout'><LogoutIcon onClick={handleLogout} /></div>
       <aside>
         <h2>Bienvenid@!</h2>
         <Button variant="contained" startIcon={<AddIcon />} onClick={handleAdd}>

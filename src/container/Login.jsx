@@ -7,9 +7,9 @@ import { useNavigate } from 'react-router-dom'
 
 const ContainerLogin = styled.div`
   width: clamp(300px, 90vw, 400px);
-  height: auto;
   display: flex; 
   flex-flow: column wrap;
+  margin: 10vh auto;
   justify-content: space-evenly;
   background-color: var(--Bg-light);
   border-radius: 1rem;
