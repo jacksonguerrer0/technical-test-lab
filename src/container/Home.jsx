@@ -11,8 +11,10 @@ import firebaseApp from '../firebase_config/firebase_config';
 import { getDocOrAddDoc } from '../helpers/functions';
 
 const HomeContainer = styled.main`
-  /* width: 100vw; */
+  width: 100%;
+  max-width: 900px;
   padding: 1rem;
+  margin: 0 auto;
   .logout{
     display: flex;
     justify-content: flex-end;
