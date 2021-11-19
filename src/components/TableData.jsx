@@ -63,7 +63,7 @@ const TableData = ({emailUser}) => {
     <>
     <TableContainer component={Paper} sx={{width: "100%",
     overflowX: "auto", maxHeight: '100vh'}}  >
-      <Table aria-label=" person" sx={{ minWidth: 650, minWidth: 700}} >
+      <Table aria-label=" person" sx={{ minWidth: 650}} >
         <TableHead sx={{backgroundColor: 'var(--Bg-light)'}}>
           <TableRow>
             <TableCell>Nombre</TableCell>
