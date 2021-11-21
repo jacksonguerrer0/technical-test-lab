@@ -16,22 +16,6 @@ const Layout = () => {
           </PrivateRoute>
         }
       />
-      <Route
-        path="/xd"
-        element={
-          <PrivateRoute redirectTo="/login" id={authEmail}>
-            <p>HOlaa</p>
-          </PrivateRoute>
-        }
-      />
-      <Route
-        path="/xd"
-        element={
-          <PrivateRoute redirectTo="/login" id={authEmail}>
-            <p>HOlaa t</p>
-          </PrivateRoute>
-        }
-      />
     </Routes>
   );
 };
