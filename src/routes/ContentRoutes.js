@@ -24,7 +24,6 @@ const ContentRoutes = () => {
       setIsLoaded(true)
     })
   }, [setAuthEmail, authEmail])
-  console.log(authEmail, 'Eail content routes')
   return (
     <BrowserRouter>
       <>
