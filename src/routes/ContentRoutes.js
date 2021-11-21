@@ -1,39 +1,46 @@
-import React, {  useEffect, useState } from 'react'
-import {  BrowserRouter, Routes, Navigate,  Route } from 'react-router-dom'
+import React, {  useContext, useEffect, useState } from 'react'
+import {  BrowserRouter, Routes,   Route } from 'react-router-dom'
 import firebaseApp from '../firebase_config/firebase_config'
 import { getAuth, onAuthStateChanged } from '@firebase/auth'
-import Home from '../container/Home'
 import Login from '../container/Login'
 import '../style/globalStyle.css'
+import AuthContext from '../context/authContext'
+import PublicRoute from './PublicRoute'
+import Layout from '../layout/Layout'
 
 const auth = getAuth(firebaseApp)
 
 
 const ContentRoutes = () => {
-  const [emailUser, setEmailUser] = useState(null)
-
+  const [isLoaded, setIsLoaded] = useState(false)
+  const {authEmail, setAuthEmail} = useContext(AuthContext)
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
       if(user?.uid){
-        setEmailUser(user.email)
+        setAuthEmail(user.email)
       }else{
-        setEmailUser(null)
+        setAuthEmail(null)
       }
+      setIsLoaded(true)
     })
-  }, [setEmailUser])
-  
+  }, [setAuthEmail, authEmail])
+  console.log(authEmail, 'Eail content routes')
   return (
     <BrowserRouter>
-      <Routes>
-        <Route index path='/login' element={<Login  emailUser={emailUser} />}/>
-        <Route path='/' 
-        element={
-          <PrivateAuth redirectTo="/login" id={emailUser} >
-            <Home emailUser={emailUser} />
-          </PrivateAuth>
-        } />
-
-      </Routes>
+      <>
+      { isLoaded &&
+        <>
+        <Routes>
+        <Route  path='/login' element={
+          <PublicRoute  redirectTo="/" id={authEmail} >
+            <Login  emailUser={authEmail} />
+        </PublicRoute>
+        }/>
+        </Routes>
+        <Layout />
+        </>
+      }
+      </>
     </BrowserRouter>
   )
 }
@@ -42,7 +49,3 @@ const ContentRoutes = () => {
 
 export default ContentRoutes
 
-const PrivateAuth = ({ children, redirectTo, id }) => {
-  let isAuthenticated = id;
-  return isAuthenticated ? children : <Navigate to={redirectTo} />;
-}

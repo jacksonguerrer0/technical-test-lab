@@ -1,9 +1,8 @@
 import { TextField, Button } from '@mui/material'
-import React, {  useEffect, useState } from 'react'
+import React, {   useState } from 'react'
 import imgGoogle from '../assets/google.png'
 import styled from 'styled-components'
 import { loginEmailAndPassword, loginGoogle, registerEmailAndPassword } from '../helpers/functions'
-import { useNavigate } from 'react-router-dom'
 
 const ContainerLogin = styled.div`
   width: clamp(300px, 90vw, 400px);
@@ -41,7 +40,6 @@ const ContainerLogin = styled.div`
 // Falta la validacion de formularios :)
 
 const Login = ({ emailUser }) => {
-  const navigate = useNavigate()
 
   const [login, setLogin] = useState(true)
   const [form, setForm] = useState({
@@ -67,12 +65,6 @@ const Login = ({ emailUser }) => {
   const handleRegisterEmailPassword = () => {
     registerEmailAndPassword(name, emailRegister, passwordRegister)
   }
-  useEffect(() => {
-    if (emailUser) {
-      navigate('/')
-    }
-  }, [navigate, emailUser])
-
   return (
     <ContainerLogin>
       {

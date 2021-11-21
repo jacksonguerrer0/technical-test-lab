@@ -9,6 +9,7 @@ import ModalAdd from '../components/ModalAdd';
 import { getAuth, signOut } from '@firebase/auth';
 import firebaseApp from '../firebase_config/firebase_config';
 import { getDocOrAddDoc } from '../helpers/functions';
+import { Link } from 'react-router-dom';
 
 const HomeContainer = styled.main`
   width: 100%;
@@ -57,6 +58,7 @@ const Home = ({ emailUser }) => {
   }, [emailUser, setDataAgendaUser])
   return (
     <HomeContainer>
+      <Link  to='/xd'>CLick</Link>
       <div className='logout'><LogoutIcon onClick={handleLogout} /></div>
       <aside>
         <h2>Bienvenid@!</h2>
