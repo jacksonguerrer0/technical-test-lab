@@ -9,7 +9,6 @@ import ModalAdd from '../components/ModalAdd';
 import { getAuth, signOut } from '@firebase/auth';
 import firebaseApp from '../firebase_config/firebase_config';
 import { getDocOrAddDoc } from '../helpers/functions';
-import { Link } from 'react-router-dom';
 
 const HomeContainer = styled.main`
   width: 100%;
@@ -38,11 +37,10 @@ const HomeContainer = styled.main`
 
 const auth = getAuth(firebaseApp)
 
-const Home = ({ emailUser }) => {
-  const {  setDataAgendaUser } = useContext(UserContext)
+const Home = ({ emailUser, name }) => {
+  const { setDataAgendaUser } = useContext(UserContext)
   const [openAdd, setOpenAdd] = React.useState(false)
   // const [personFirestore, setPersonFirestore] = useState({})
-
   const handleAdd = () => {
     setOpenAdd(true)
   }
@@ -58,10 +56,9 @@ const Home = ({ emailUser }) => {
   }, [emailUser, setDataAgendaUser])
   return (
     <HomeContainer>
-      <Link  to='/xd'>CLick</Link>
       <div className='logout'><LogoutIcon onClick={handleLogout} /></div>
       <aside>
-        <h2>Bienvenid@!</h2>
+        <h2>Bienvenid@! {name}</h2>
         <Button variant="contained" startIcon={<AddIcon />} onClick={handleAdd}>
            Agregar
         </Button>

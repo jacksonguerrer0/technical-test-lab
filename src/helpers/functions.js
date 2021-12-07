@@ -1,5 +1,5 @@
 import  firebaseApp  from "../firebase_config/firebase_config"
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signInWithRedirect, GoogleAuthProvider } from "firebase/auth";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signInWithRedirect, updateProfile, GoogleAuthProvider } from "firebase/auth";
 import { getFirestore, doc, getDoc, setDoc, updateDoc, onSnapshot } from 'firebase/firestore'
 
 const auth = getAuth(firebaseApp)
@@ -11,24 +11,25 @@ export const loginGoogle = async () => {
   
 }
 
-export const registerEmailAndPassword = (name, email, password) => {
-  createUserWithEmailAndPassword (auth, email, password)
-    .then(async ({user}) => {
-    })
-    .catch((error) => {
+export const registerEmailAndPassword = async (name, email, password) => {
+    try{
+      const { user } = await createUserWithEmailAndPassword (auth, email, password)
+      await updateProfile(user, { displayName: name })
+    }
+    catch(error) {
+      console.log(error)
       const errorCode = error.code;
-      const errorMessage = error.message;
-      console.log(errorCode, errorMessage)
-    });
+      // const errorMessage = error.message;
+      return errorCode
+    }
 }
-export const loginEmailAndPassword = (email, password) => {
-  signInWithEmailAndPassword(auth, email, password)
-      .then(({user})=>{
-          console.log(user.uid, user.email, user.displayName)
-      })
-      .catch(error => {
-          console.log(error)
-      })
+export const loginEmailAndPassword = async (email, password) => {
+  try {
+    await signInWithEmailAndPassword(auth, email, password)
+  } catch (err) {
+    console.error(err)
+    return err.code
+  }
 }
 
 

@@ -54,6 +54,10 @@ const Login = ({ emailUser }) => {
   const [login, setLogin] = useState(true)
   const [form, setForm] = useState({
   })
+  const [error, setError] = useState({
+    login: '',
+    register: ''
+  })
   const {name, emailRegister, passwordRegister, emailLogin, passwordLogin} = form
   const handleLogin = () => {
     setLogin(!login)
@@ -69,11 +73,15 @@ const Login = ({ emailUser }) => {
   const handleLoginGoogle = () => {
     loginGoogle()
   }
-  const handleLoginEmailPassword = () => {
-    loginEmailAndPassword(emailLogin, passwordLogin) 
+  const handleLoginEmailPassword = async  (e) => {
+    e.preventDefault()
+    const res = await loginEmailAndPassword(emailLogin, passwordLogin) 
+    setError({...error, login: res})
   }
-  const handleRegisterEmailPassword = () => {
-    registerEmailAndPassword(name, emailRegister, passwordRegister)
+  const handleRegisterEmailPassword = async (e) => {
+    e.preventDefault()
+    const res = await registerEmailAndPassword(name, emailRegister, passwordRegister)
+    setError({...error, register: res})
   }
   return (
     <ContainerLogin>
@@ -94,7 +102,8 @@ const Login = ({ emailUser }) => {
               onChange={handleFormChange}
               required
             />
-            <Button variant="contained" >Iniciar</Button>
+            <Button variant="contained" type='submit'>Iniciar</Button>
+            <p style={{color: 'red', textAlign: 'center'}}>{error.login}</p>
           </form>
           :
           <form onSubmit={handleRegisterEmailPassword}>
@@ -124,7 +133,8 @@ const Login = ({ emailUser }) => {
               onChange={handleFormChange}
               required
             />
-            <Button variant="contained">Registrar</Button>
+            <Button variant="contained" type='submit'>Registrar</Button>
+            <p style={{color: 'red', textAlign: 'center'}}>{error.register}</p>
           </form>
       }
       <hr />

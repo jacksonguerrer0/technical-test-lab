@@ -7,18 +7,20 @@ import '../style/globalStyle.css'
 import AuthContext from '../context/authContext'
 import PublicRoute from './PublicRoute'
 import Layout from '../layout/Layout'
-import NoMatch from '../container/NoMatch'
 
 const auth = getAuth(firebaseApp)
 
 
 const ContentRoutes = () => {
   const [isLoaded, setIsLoaded] = useState(false)
+  const [name, setName] = useState('')
   const {authEmail, setAuthEmail} = useContext(AuthContext)
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
       if(user?.uid){
-        setAuthEmail(user.email)
+        setAuthEmail(user.email)  
+        setName(user.displayName)
+        // console.log(user.email, user.displayName)
       }else{
         setAuthEmail(null)
       }
@@ -36,9 +38,8 @@ const ContentRoutes = () => {
             <Login  emailUser={authEmail} />
         </PublicRoute>
         }/>
-        <Route path='*' element={<NoMatch />} />
         </Routes>
-        <Layout />
+        <Layout name={name}/>
         </>
       }
       </>
