@@ -5,18 +5,28 @@ import styled from 'styled-components'
 import { loginEmailAndPassword, loginGoogle, registerEmailAndPassword } from '../helpers/functions'
 
 const ContainerLogin = styled.div`
-  width: clamp(300px, 90vw, 400px);
-  display: flex; 
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  > div{
+    width: clamp(300px, 90vw, 400px);
+  display: flex;
   flex-flow: column wrap;
-  margin: 10vh auto;
-  justify-content: space-evenly;
   background-color: var(--Bg-light);
   border-radius: 1rem;
   border:  1px solid var(--color-secondary);
+  margin: 10vh auto;
+  form {
+  width: inherit;
+  display: inherit; 
+  flex-flow:inherit;
   padding: 1rem;
   > div{
     margin: 0.5rem 0;
   }
+  } 
   img{
     width: 30px;
     height: 30px;
@@ -26,8 +36,7 @@ const ContainerLogin = styled.div`
   small{
     display: flex;
     width: auto;
-    margin-left: auto;
-    margin-right: auto;
+    margin: 0 auto 1rem auto;
     color: var(--color-secondary);
     text-align: center;
     text-decoration: underline;
@@ -35,7 +44,8 @@ const ContainerLogin = styled.div`
     :hover{
       color: var(--Bg-color);
     }
-}
+  }
+  }
 `
 // Falta la validacion de formularios :)
 
@@ -67,9 +77,10 @@ const Login = ({ emailUser }) => {
   }
   return (
     <ContainerLogin>
+      <div>
       {
         login ?
-          <>
+          <form onSubmit={handleLoginEmailPassword}>
             <TextField label="Correo"
               type="email"
               name='emailLogin'
@@ -83,10 +94,10 @@ const Login = ({ emailUser }) => {
               onChange={handleFormChange}
               required
             />
-            <Button variant="contained" onClick={handleLoginEmailPassword}>Iniciar</Button>
-          </>
+            <Button variant="contained" >Iniciar</Button>
+          </form>
           :
-          <>
+          <form onSubmit={handleRegisterEmailPassword}>
             <TextField label="Nombre"
               type="string"
               name='name'
@@ -113,8 +124,8 @@ const Login = ({ emailUser }) => {
               onChange={handleFormChange}
               required
             />
-            <Button variant="contained" onClick={handleRegisterEmailPassword}>Registrar</Button>
-          </>
+            <Button variant="contained">Registrar</Button>
+          </form>
       }
       <hr />
       <img src={imgGoogle} alt="google" onClick={handleLoginGoogle} />
@@ -122,6 +133,7 @@ const Login = ({ emailUser }) => {
         login ? <small onClick={handleLogin}><i>Crear Cuenta</i></small>
           : <small onClick={handleLogin}><i>Iniciar Sesion</i></small>
       }
+      </div>
     </ContainerLogin>
   )
 }

@@ -7,6 +7,7 @@ import '../style/globalStyle.css'
 import AuthContext from '../context/authContext'
 import PublicRoute from './PublicRoute'
 import Layout from '../layout/Layout'
+import NoMatch from '../container/NoMatch'
 
 const auth = getAuth(firebaseApp)
 
@@ -35,6 +36,7 @@ const ContentRoutes = () => {
             <Login  emailUser={authEmail} />
         </PublicRoute>
         }/>
+        <Route path='*' element={<NoMatch />} />
         </Routes>
         <Layout />
         </>
