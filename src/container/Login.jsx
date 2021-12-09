@@ -49,8 +49,7 @@ const ContainerLogin = styled.div`
 `
 // Falta la validacion de formularios :)
 
-const Login = ({ emailUser }) => {
-
+const Login = () => {
   const [login, setLogin] = useState(true)
   const [form, setForm] = useState({
   })
@@ -76,12 +75,16 @@ const Login = ({ emailUser }) => {
   const handleLoginEmailPassword = async  (e) => {
     e.preventDefault()
     const res = await loginEmailAndPassword(emailLogin, passwordLogin) 
-    setError({...error, login: res})
+    if(res){
+      setError({...error, login: res})
+    }
   }
   const handleRegisterEmailPassword = async (e) => {
     e.preventDefault()
     const res = await registerEmailAndPassword(name, emailRegister, passwordRegister)
-    setError({...error, register: res})
+    if(res){
+      setError({...error, register: res})
+    }
   }
   return (
     <ContainerLogin>

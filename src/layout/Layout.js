@@ -8,7 +8,7 @@ const Layout = ({name}) => {
   const {authEmail} = useContext(AuthContext)
   return (
     <Routes>
-      <Route path='/*' element={<NoMatch />} />
+      <Route path='*' element={<NoMatch />} />
       <Route
         path="/"
         element={

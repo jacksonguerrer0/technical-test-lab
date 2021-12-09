@@ -20,12 +20,12 @@ const ContentRoutes = () => {
       if(user?.uid){
         setAuthEmail(user.email)  
         setName(user.displayName)
-        // console.log(user.email, user.displayName)
       }else{
         setAuthEmail(null)
       }
       setIsLoaded(true)
     })
+
   }, [setAuthEmail, authEmail])
   return (
     <BrowserRouter>
